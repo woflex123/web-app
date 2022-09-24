@@ -17,7 +17,7 @@ stage('BackupArtifacts'){
 sh "echo backup to Nexus"
 sh "${MHD}/bin/mvn deploy"
 }
-stage('DeploytoTomcat'){
+stage('DeploytoStaging'){
 sh "echo Deploy to Tomcat server"
 deploy adapters: [tomcat9(credentialsId: 'Tomcat-cred', path: '', url: 'http://54.196.234.205:7000/')], contextPath: null, war: 'target/*war'
 }
@@ -27,7 +27,7 @@ timeout(time:5, UNIT:'DAYS'){
 input message:'Approval for Prod'
 }
 }
-stage('DeploytoTomcat'){
+stage('DeploytoProd'){
 sh "echo Deploy to Tomcat server"
 deploy adapters: [tomcat9(credentialsId: 'Tomcat-cred', path: '', url: 'http://54.196.234.205:7000/')], contextPath: null, war: 'target/*war'
 }
