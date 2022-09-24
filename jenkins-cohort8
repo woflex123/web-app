@@ -21,4 +21,14 @@ stage('DeploytoTomcat'){
 sh "echo Deploy to Tomcat server"
 deploy adapters: [tomcat9(credentialsId: 'Tomcat-cred', path: '', url: 'http://54.196.234.205:7000/')], contextPath: null, war: 'target/*war'
 }
+stage('Approval'){
+sh "echo approval for Jenkins-file-app"
+timeout(time:5, UNIT:'DAYS'){
+input message:'Approval for Prod'
+}
+}
+stage('DeploytoTomcat'){
+sh "echo Deploy to Tomcat server"
+deploy adapters: [tomcat9(credentialsId: 'Tomcat-cred', path: '', url: 'http://54.196.234.205:7000/')], contextPath: null, war: 'target/*war'
+}
 }
