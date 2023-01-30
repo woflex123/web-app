@@ -7,7 +7,7 @@ pipeline{
   stages{
     stage("1_Git clone"){
       steps{
-        git credentialsId: 'git_cred', url: 'https://github.com/woflex123/web-app.git
+        git credentialsId: 'git_cred', url: 'https://github.com/woflex123/web-app.git'
       }
     }
     stage("2_Code build"){
@@ -25,7 +25,7 @@ pipeline{
      stage("5. Deploy to UAT"){
       steps{
         sh "echo deploy to UAT Environment"
-        deploy adapters: [tomcat9(credentialsId: 'tomcat_cred', path: '', url: 'http://54.236.79.28:8080/')], contextPath: null, war: 'target/*.war'
+        deploy adapters: [tomcat9(credentialsId: 'tomcat_cred', path: '', url: 'http://35.173.232.30:8080/')], contextPath: null, war: 'target/*.war'
       }
     }
     stage("6. Approval"){
@@ -39,7 +39,7 @@ pipeline{
     stage("5. Deploy to Prod"){
       steps{
         sh "echo deploy to Prod Environment"
-        deploy adapters: [tomcat9(credentialsId: 'tomcat_cred', path: '', url: 'http://54.236.79.28:8080/')], contextPath: null, war: 'target/*.war'
+        deploy adapters: [tomcat9(credentialsId: 'tomcat_cred', path: '', url: 'http://35.173.232.30:8080/')], contextPath: null, war: 'target/*.war'
       }
       }
   }
