@@ -1,0 +1,47 @@
+//declarative
+pipeline{
+  agent {label 'node1'}
+  tools{
+    maven "mvn3.8.6"
+  }
+  stages{
+    stage("1_Git clone"){
+      steps{
+        git credentialsId: 'git_cred', url: 'https://github.com/woflex123/web-app.git
+      }
+    }
+    stage("2_Code build"){
+      steps{
+        sh "echo start of maven build"
+        sh "mvn clean package"
+      }
+    }
+   stage("4. Backup"){
+      steps{
+        sh "echo backup to nexus"
+        sh "mvn deploy"
+      }
+    }
+     stage("5. Deploy to UAT"){
+      steps{
+        sh "echo deploy to UAT Environment"
+        deploy adapters: [tomcat9(credentialsId: 'tomcat_cred', path: '', url: 'http://54.236.79.28:8080/')], contextPath: null, war: 'target/*.war'
+      }
+    }
+    stage("6. Approval"){
+      steps{
+        sh "echo approval needed"
+        timeout(time:2, unit:'DAYS'){
+          input message:'Approval for Production eni'
+  }
+  }
+}
+    stage("5. Deploy to Prod"){
+      steps{
+        sh "echo deploy to Prod Environment"
+        deploy adapters: [tomcat9(credentialsId: 'tomcat_cred', path: '', url: 'http://54.236.79.28:8080/')], contextPath: null, war: 'target/*.war'
+      }
+      }
+  }
+
+}
